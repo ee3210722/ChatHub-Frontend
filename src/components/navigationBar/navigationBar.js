@@ -7,34 +7,42 @@ import { IconContext } from 'react-icons';
 import { useNavigate } from 'react-router-dom';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ProfileEditModal from '../ProfileEditModal';
+import axios from 'axios';
 import './navigationBar.css';
 
 function Navbar(props) {
 
-  const [sidebar, setSidebar] = useState(false);
-  const showSidebar = () => setSidebar(!sidebar);
-
   const navigate = useNavigate();
 
-  const handleLogout = async (e) => {
-      e.preventDefault();
-      const response = await fetch("https://chathub-server-r5w7.onrender.com/logout", {
-        method: 'GET',
-        headers: {
-          'authToken': localStorage.getItem('token')
-        }
-      });
-      const json = await response.json()
-    if (json.success) {
-          localStorage.removeItem('token');
-          props.showAlert(json.msg, "success");
-          navigate("/");
-      }
-      else{
-          props.showAlert(json.msg, "danger");
-      }
-  };
+  const [sidebar, setSidebar] = useState(false);
+  const showSidebar = () => { setSidebar(!sidebar) };
 
+  const [isProfileModalOpen, setProfileModalOpen] = useState(false);
+  const handleOpenProfileModal = () => { setProfileModalOpen(true) };
+  const handleCloseProfileModal = () => { setProfileModalOpen(false) };
+
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+        const response = await axios.get("http://localhost:9000/logout", {
+            headers: {
+                'authToken': localStorage.getItem('token')
+            }
+        });
+
+        if (response.data.success) {
+            localStorage.removeItem('token');
+            props.showAlert(response.data.msg, "success");
+            navigate("/");
+        } else {
+            props.showAlert(response.data.msg, "danger");
+        }
+    } catch (error){
+        props.showAlert("An error occurred during logout", "danger");
+    }
+  };
 
   return (
     <>
@@ -59,7 +67,7 @@ function Navbar(props) {
 
           {localStorage.getItem('token') ? (
             <div className='navbar-icons'>
-              <div><AccountCircleIcon /></div>
+              <div onClick={handleOpenProfileModal}><AccountCircleIcon /></div>
               <div><CircleNotificationsIcon/></div>
               <button onClick={handleLogout} className="btn btn-primary">Logout</button>
           </div>
@@ -71,6 +79,9 @@ function Navbar(props) {
           )}
 
         </div>
+
+        {/* Render the ProfileEditModal */}
+        <ProfileEditModal isOpen={isProfileModalOpen} onClose={handleCloseProfileModal} showAlert={props.showAlert} />
 
         <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
           <ul className='nav-menu-items' onClick={showSidebar}>
