@@ -1,0 +1,70 @@
+.dashboard {
+  background-color: #f4f5f8;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-img {
+  width: 15vw;
+  height: 15vw;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dashboard-username {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #333;
+}
+
+.dashboard-role {
+  font-size: 1.5rem;
+  color: #555;
+  margin-top: 5px;
+}
+
+.dashboard-bio {
+  text-align: center;
+  margin: 20px;
+  color: #666;
+}
+
+.dashboard-stats {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.dashboard-stats div {
+  height: 20vh;
+  width: 20vw;
+  border-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-friends {
+  background-color: rgb(67, 243, 237);
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.dashboard-groups {
+  background-color: red;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.dashboard-rating {
+  background-color: rgb(238, 134, 29);
+  font-size: 1.2rem;
+  color: #fff;
+}

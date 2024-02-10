@@ -1,0 +1,53 @@
+.homepage-container {
+  display: flex;
+  background-color: white;
+  height: 100vh;
+}
+
+.homepage-left {
+  flex: 0.5;
+  margin-left: 40px;
+}
+
+.homepage-image {
+  margin-top: 30px;
+  width: 80%;
+  height: 80%;
+  object-fit: cover;
+}
+
+.homepage-right {
+  flex: 0.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+}
+
+.homepage-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.homepage-description {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.homepage-signup button {
+  background-color: #1a83ff;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: background-color 0.3s ease;
+}
+
+.homepage-signup button:hover {
+  background-color: #155fbf;
+}

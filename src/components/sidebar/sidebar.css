@@ -1,0 +1,46 @@
+.sidebar-container{
+    flex: 0.3;
+    display: flex;
+    flex-direction: column;
+}
+
+.sb-header{
+    background-color: white;
+    border-radius: 20px;
+    padding: 10px 5px;
+    margin: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.sb-header h3 {
+    margin-left: 5px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.54);
+}
+
+.sb-search{
+    background-color: white;
+    border-radius: 20px;
+    padding: 5px 10px;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+}
+
+
+.sb-conversations{
+    background-color: white;
+    border-radius: 20px;
+    padding: 5px 10px;
+    margin: 10px;
+    flex: 1;
+}
+
+.search-box{
+    outline-width: 0;
+    border: none;
+    margin-left: 10px;
+    font-size: 1.25rem;
+    color: rgba(0, 0, 0, 0.54);
+}
