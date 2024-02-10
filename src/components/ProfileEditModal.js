@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { BACKEND_URL } from '../services/info';
 import axios from "axios";
 
 const ProfileEditModal = (props) => {
@@ -28,7 +29,7 @@ const ProfileEditModal = (props) => {
             formData.append('image', editedProfile.image);
 
             const response = await axios.put(
-                "http://localhost:9000/editUserProfile",
+                `${BACKEND_URL}/editUserProfile`,
                 formData,
                 {
                     headers: {

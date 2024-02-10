@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ProfileEditModal from '../ProfileEditModal';
+import { BACKEND_URL } from '../../services/info';
 import axios from 'axios';
 import './navigationBar.css';
 
@@ -26,7 +27,7 @@ function Navbar(props) {
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.get("http://localhost:9000/logout", {
+        const response = await axios.get(`${BACKEND_URL}/logout`, {
             headers: {
                 'authToken': localStorage.getItem('token')
             }

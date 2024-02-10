@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {BACKEND_URL} from "../../services/info"
 import "./login.css"
 
 export default function Login(props) {
@@ -11,7 +12,7 @@ export default function Login(props) {
     const handleOnLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:9000/login", credentials);
+            const response = await axios.post(`${BACKEND_URL}/login`, credentials);
             if (response.data.success) {
                 localStorage.setItem('token', response.data.authToken);
                 props.showAlert(response.data.msg, "success");

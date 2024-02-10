@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { BACKEND_URL } from "../../services/info";
 import "./signup.css";
 
 export default function Signup(props) {
@@ -16,7 +17,7 @@ export default function Signup(props) {
     const handleOnSignup = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:9000/register", credentials);
+            const response = await axios.post(`${BACKEND_URL}/register`, credentials);
             if (response.data.success) {
                 props.showAlert(response.data.msg, "success");
                 navigate("/login");
