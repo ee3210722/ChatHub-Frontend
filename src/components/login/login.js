@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import "./login.css"
 
 export default function Login(props) {
@@ -10,13 +11,18 @@ export default function Login(props) {
 
     const handleOnLogin = async (e) => {
         e.preventDefault();
-        const response = await fetch("https://chathub-server-r5w7.onrender.com/login", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
+        const response = await axios.post(
+            "https://chathub-server-r5w7.onrender.com/login",
+            {
+                email: credentials.email,
+                password: credentials.password
             },
-            body: JSON.stringify({email: credentials.email, password: credentials.password})
-        });
+            {
+                headers: {
+                'Content-Type': 'application/json'
+                }
+            }
+        );
         const json = await response.json()
         if (json.success) {
             localStorage.setItem('token', json.authToken);
