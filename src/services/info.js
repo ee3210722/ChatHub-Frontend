@@ -1,3 +1,3 @@
-const BACKEND_URL = "https://chathub-server-r5w7.onrender.com";
+const BACKEND_URL = "http://localhost:9000";
 
 module.exports = { BACKEND_URL };

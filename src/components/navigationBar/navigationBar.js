@@ -9,7 +9,6 @@ import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ProfileEditModal from '../ProfileEditModal';
 import { BACKEND_URL } from '../../services/info';
-import axios from 'axios';
 import './navigationBar.css';
 
 function Navbar(props) {
@@ -27,23 +26,29 @@ function Navbar(props) {
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.get(`${BACKEND_URL}/logout`, {
-            headers: {
-                'authToken': localStorage.getItem('token')
-            }
-        });
+      const response = await fetch(`${BACKEND_URL}/logout`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'authToken': localStorage.getItem('token')
+        },
+      });
 
-        if (response.data.success) {
-            localStorage.removeItem('token');
-            props.showAlert(response.data.msg, "success");
-            navigate("/");
-        } else {
-            props.showAlert(response.data.msg, "danger");
-        }
-    } catch (error){
-        props.showAlert("An error occurred during logout", "danger");
+      const responseData = await response.json();
+
+      if (responseData.success) {
+        localStorage.removeItem('token');
+        props.showAlert(responseData.msg, "success");
+        navigate("/");
+      } else {
+        props.showAlert(responseData.msg, "danger");
+      }
+    } catch (error) {
+      console.error(error);
+      props.showAlert("An error occurred during logout", "danger");
     }
   };
+
 
   return (
     <>

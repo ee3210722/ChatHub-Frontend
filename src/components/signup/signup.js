@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { BACKEND_URL } from "../../services/info";
 import "./signup.css";
 
@@ -16,18 +15,29 @@ export default function Signup(props) {
 
     const handleOnSignup = async (e) => {
         e.preventDefault();
+
         try {
-            const response = await axios.post(`${BACKEND_URL}/register`, credentials);
-            if (response.data.success) {
-                props.showAlert(response.data.msg, "success");
+            console.log(`${BACKEND_URL}/register`);
+            const response = await fetch(`${BACKEND_URL}/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials),
+            });
+
+            const responseData = await response.json();
+
+            if (responseData.success) {
+                props.showAlert(responseData.msg, "success");
                 navigate("/login");
             } else {
-                props.showAlert(response.data.msg, "danger");
+                props.showAlert(responseData.msg, "danger");
             }
-        } catch (error){
+        } catch (error) {
             props.showAlert("An error occurred during signup", "danger");
         }
-    }
+    };
 
 
     return (

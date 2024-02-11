@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BACKEND_URL } from '../services/info';
-import axios from "axios";
 
 const ProfileEditModal = (props) => {
 
@@ -19,6 +18,7 @@ const ProfileEditModal = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
             const formData = new FormData();
             formData.append('name', editedProfile.name);
@@ -28,22 +28,26 @@ const ProfileEditModal = (props) => {
             formData.append('bio', editedProfile.bio);
             formData.append('image', editedProfile.image);
 
-            const response = await axios.put(
-                `${BACKEND_URL}/editUserProfile`,
-                formData,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'authToken': localStorage.getItem('token')
-                    }
-                }
-            );
+            const authToken = localStorage.getItem('token');
 
-            if (response.data.success) {
-                props.onClose();
-                props.showAlert(response.data.msg, "success");
+            const response = await fetch(`${BACKEND_URL}/editUserProfile`, {
+                method: 'PUT',
+                headers: {
+                    'authToken': authToken
+                },
+                body: formData,
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                if (responseData.success) {
+                    props.onClose();
+                    props.showAlert(responseData.msg, "success");
+                } else {
+                    props.showAlert(responseData.msg, "danger");
+                }
             } else {
-                props.showAlert(response.data.msg, "danger");
+                props.showAlert("An error occurred during updating user profile", "danger");
             }
         } catch (error) {
             console.error(error);
