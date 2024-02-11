@@ -12,7 +12,7 @@ export const SidebarData = [
   },
   {
     title: 'Chats',
-    path: '/chats',
+    path: '/mainContainer',
     icon: <FaIcons.FaComments />,
     cName: 'nav-text'
   },

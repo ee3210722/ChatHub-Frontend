@@ -10,14 +10,21 @@ import InsertEmoticonOutlinedIcon from '@mui/icons-material/InsertEmoticonOutlin
 import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import './chatarea.css';
 
-export default function ChatArea({props}) {
+export default function ChatArea() {
+
+  const user = {
+    name: "User1",
+    lastMessage: "Last Message #1",
+    timeStamp: "today"
+  }
+
   return (
       <div className="chatArea-container">
 
         <div className="chatArea-header">
-            <p className="con-icon">{props.name[0]}</p>
+            <p className="chatArea-icon">{user.name[0]}</p>
             <div className="header-text">
-                <p className="con-title">{props.name}</p>
+                <p className="chatArea-title">{user.name}</p>
                 <p className="online-status">Online</p>
             </div>
             <div className="icon-buttons">
