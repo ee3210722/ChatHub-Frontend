@@ -26,14 +26,13 @@ function Navbar(props) {
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${BACKEND_URL}/logout`, {
+      const response = await fetch(`${BACKEND_URL}/api/user/logout`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'authToken': localStorage.getItem('token')
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
       });
-
       const responseData = await response.json();
 
       if (responseData.success) {

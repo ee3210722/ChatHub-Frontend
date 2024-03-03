@@ -17,8 +17,7 @@ export default function Signup(props) {
         e.preventDefault();
 
         try {
-            console.log(`${BACKEND_URL}/register`);
-            const response = await fetch(`${BACKEND_URL}/register`, {
+            const response = await fetch(`${BACKEND_URL}/api/user/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

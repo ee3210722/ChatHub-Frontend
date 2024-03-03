@@ -14,14 +14,13 @@ export default function Dashboard() {
 
   const getUserData = async () => {
     try {
-      const response = await fetch(`${BACKEND_URL}/getUserData`, {
+      const response = await fetch(`${BACKEND_URL}/api/user/getUserData`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'authToken': localStorage.getItem('token')
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      console.log(response.status)
       if (response.ok) {
         const json = await response.json();
         setUserProfileData(json.userData);

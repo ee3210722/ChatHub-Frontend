@@ -30,10 +30,10 @@ const ProfileEditModal = (props) => {
 
             const authToken = localStorage.getItem('token');
 
-            const response = await fetch(`${BACKEND_URL}/editUserProfile`, {
+            const response = await fetch(`${BACKEND_URL}/api/user/editUserProfile`, {
                 method: 'PUT',
                 headers: {
-                    'authToken': authToken
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
                 body: formData,
             });
