@@ -24,6 +24,11 @@
     font-size: larger;
 }
 
+.add-icon {
+    margin-right: 10px;
+    margin-left: auto;
+}
+
 .ug-search{
     background-color: white;
     border-radius: 20px;

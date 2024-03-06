@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconButton } from '@mui/material';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import PersonIcon from '@mui/icons-material/Person';
+import GroupIcon from '@mui/icons-material/Group';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import SearchIcon from '@mui/icons-material/Search';
 import ConversationsItem from '../convoitems/convoitems';
@@ -37,8 +37,8 @@ export default function Sidebar() {
       <div className="sb-header">
         <h3>Chats</h3>
         <div>
-          <IconButton onClick={() => navigate("users")}><PersonAddIcon /></IconButton>
-          <IconButton onClick={() => navigate("groups")}><GroupAddIcon /></IconButton>
+          <IconButton onClick={() => navigate("users")}><PersonIcon /></IconButton>
+          <IconButton onClick={() => navigate("groups")}><GroupIcon /></IconButton>
           <IconButton><DarkModeIcon /></IconButton>
         </div>
       </div>

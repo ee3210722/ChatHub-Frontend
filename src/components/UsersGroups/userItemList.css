@@ -1,0 +1,42 @@
+.searchItem-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    align-items: center;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 20px;
+    transition-duration: 0.5s;
+  }
+
+  .searchItem-container:hover {
+    background-color: #d9d9d9;
+  }
+
+  .searchItem-container:active {
+    background-color: white;
+  }
+
+  .searchItem-userImage {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .searchItem-right {
+    padding-top: 5px;
+  }
+
+  .searchItem-userName {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.54);
+    margin: 0;
+  }
+
+  .searchItem-userEmail {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.75rem;
+    margin: 0;
+  }

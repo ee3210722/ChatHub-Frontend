@@ -1,5 +1,7 @@
 .dashboard {
-  background-color: #f4f5f8;
+  background-color: #294d6d;
+  background-image: linear-gradient(to bottom, rgba(34, 38, 115, 0.6), rgba(228, 124, 124, 0.4)); /* Adding shade */
+  height: 100vh;
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -11,27 +13,44 @@
 .dashboard-img {
   width: 15vw;
   height: 15vw;
+  min-width: 150px; /* Set minimum width */
+  min-height: 150px; /* Set minimum height */
   border-radius: 50%;
   object-fit: cover;
+}
+
+.upload-icon {
+  position: absolute;
+  transform: translate(-100%, 90%); /* Center the icon relative to its parent */
+  background-color: rgba(218, 219, 214, 0.7);
+  padding: 5px;
+  z-index: 1; /* Ensure the icon appears above the image */
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Add smooth transition effect */
+}
+
+.upload-icon:hover {
+  background-color: rgba(255, 255, 255, 0.9); /* Lighten the background color on hover */
 }
 
 .dashboard-username {
   font-size: 2rem;
   font-weight: bold;
   margin-top: 10px;
-  color: #333;
+  color: #ffffff;
 }
 
 .dashboard-role {
   font-size: 1.5rem;
-  color: #555;
+  color: #ffffff;
   margin-top: 5px;
 }
 
 .dashboard-bio {
   text-align: center;
   margin: 20px;
-  color: #666;
+  color: #ffffff;
 }
 
 .dashboard-stats {

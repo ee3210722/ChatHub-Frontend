@@ -1,12 +1,14 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
-import {BACKEND_URL} from "../../services/info"
+import { BACKEND_URL } from "../../services/info"
+import { ChatState } from "../../Context/ChatProvider";
 import "./login.css"
 
 export default function Login(props) {
 
     const navigate = useNavigate();
     const [credentials, setCredentials] = useState({ email: "", password: "" })
+    const { user, setUser } = ChatState();
 
     const handleOnLogin = async (e) => {
         e.preventDefault();
@@ -22,6 +24,8 @@ export default function Login(props) {
             const responseData = await response.json();
 
             if (responseData.success) {
+                setUser(JSON.stringify(responseData.userInfo));  // Chat Context
+                localStorage.setItem('userInfo', JSON.stringify(responseData.userInfo));
                 localStorage.setItem('token', responseData.authToken);
                 props.showAlert(responseData.msg, 'success');
                 navigate('/dashboard');

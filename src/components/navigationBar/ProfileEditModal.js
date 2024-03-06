@@ -1,19 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { BACKEND_URL } from '../services/info';
+import { BACKEND_URL } from '../../services/info';
+import { ChatState } from '../../Context/ChatProvider';
 
 const ProfileEditModal = (props) => {
+
+    const { setUser } = ChatState();
 
     const ref = useRef(null);
     const refClose = useRef(null);
 
-    const [editedProfile, setEditedProfile] = useState({ name: '', dateOfBirth: '', occupation: '', bio: '', age: '', image: null});
+    const [editedProfile, setEditedProfile] = useState({ name: '', dateOfBirth: '', occupation: '', bio: '', age: ''});
 
     const handleChange = (e) => {
-        if (e.target.name === 'image') {
-            setEditedProfile({...editedProfile, [e.target.name]: e.target.files[0]});
-        } else {
-            setEditedProfile({...editedProfile, [e.target.name]: e.target.value });
-        }
+        setEditedProfile({...editedProfile, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = async (e) => {
@@ -26,9 +25,6 @@ const ProfileEditModal = (props) => {
             formData.append('age', editedProfile.age);
             formData.append('occupation', editedProfile.occupation);
             formData.append('bio', editedProfile.bio);
-            formData.append('image', editedProfile.image);
-
-            const authToken = localStorage.getItem('token');
 
             const response = await fetch(`${BACKEND_URL}/api/user/editUserProfile`, {
                 method: 'PUT',
@@ -42,6 +38,7 @@ const ProfileEditModal = (props) => {
                 const responseData = await response.json();
                 if (responseData.success) {
                     props.onClose();
+                    setUser(responseData.updatedUser);
                     props.showAlert(responseData.msg, "success");
                 } else {
                     props.showAlert(responseData.msg, "danger");
@@ -50,7 +47,6 @@ const ProfileEditModal = (props) => {
                 props.showAlert("An error occurred during updating user profile", "danger");
             }
         } catch (error) {
-            console.error(error);
             props.showAlert("An error occurred during updating user profile", "danger");
         }
     };
@@ -84,10 +80,6 @@ const ProfileEditModal = (props) => {
                         {/* Here, we are adding a form in which we are updating the user's profile or adding more details */}
                         <div className="container my-3">
                             <form className="my-3">
-                                <div className="mb-3">
-                                    <label htmlFor="image" className="form-label">Image</label>
-                                    <input type="file" className="form-control" id="image" name="image" onChange={handleChange}/>
-                                </div>
                                 <div className="mb-3">
                                     <label htmlFor="name" className="form-label">Name</label>
                                     <input type="text" className="form-control" id="name" name="name" value={editedProfile.name} onChange={handleChange}/>

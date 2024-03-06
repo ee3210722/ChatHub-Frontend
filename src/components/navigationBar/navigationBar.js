@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom';
 import { SidebarData } from '../SidebarData';
 import { IconContext } from 'react-icons';
 import { useNavigate } from 'react-router-dom';
+import { IconButton } from '@mui/material';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ProfileEditModal from '../ProfileEditModal';
+import ProfileEditModal from './ProfileEditModal';
 import { BACKEND_URL } from '../../services/info';
 import './navigationBar.css';
 
@@ -37,6 +38,7 @@ function Navbar(props) {
 
       if (responseData.success) {
         localStorage.removeItem('token');
+        localStorage.removeItem('userInfo');
         props.showAlert(responseData.msg, "success");
         navigate("/");
       } else {
@@ -86,7 +88,7 @@ function Navbar(props) {
         </div>
 
         {/* Render the ProfileEditModal */}
-        <ProfileEditModal isOpen={isProfileModalOpen} onClose={handleCloseProfileModal} showAlert={props.showAlert} />
+        {/* <ProfileEditModal isOpen={isProfileModalOpen} onClose={handleCloseProfileModal} showAlert={props.showAlert} /> */}
 
         <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
           <ul className='nav-menu-items' onClick={showSidebar}>
