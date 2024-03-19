@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { BACKEND_URL } from '../../services/info';
-import { ChatState } from '../../Context/ChatProvider';
+import { UserState } from '../../Context/UserProvider';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import './dashboard.css';
 
 export default function Dashboard() {
 
-  const { user } = ChatState();
+  const { user } = UserState();
 
   const [userProfileData, setUserProfileData] = useState({
     name: "Add Your Name",
     occupation: "Add your Role",
     bio: "Add your bio",
     friends: 0,
-    rooms_joined: 0
+    groupsJoined: 0
   });
 
   const getUserData = async () => {
@@ -22,7 +22,7 @@ export default function Dashboard() {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${sessionStorage.getItem('token')}`
         }
       });
       if (response.ok) {
@@ -50,7 +50,7 @@ export default function Dashboard() {
       const response = await fetch(`${BACKEND_URL}/api/user/uploadUserImage`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${sessionStorage.getItem('token')}`
         },
         body: formData
       });
@@ -81,7 +81,7 @@ export default function Dashboard() {
             <h4>Friends</h4>
         </div>
         <div className="dashboard-groups">
-            <h2>{userProfileData.rooms_joined.length}</h2>
+            <h2>{userProfileData.groupsJoined.length}</h2>
             <h4>Groups Joined</h4>
         </div>
         <div className="dashboard-rating">

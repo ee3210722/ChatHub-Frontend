@@ -1,13 +1,12 @@
 import React from 'react';
 import './selfMessage.css'
 
-export default function SelfMessage() {
-    let props2 = {name: "You", message: "I am good! How do you doing?"}
+export default function SelfMessage({msg}) {
   return (
       <div className="self-message-container">
-          <div className="messageBox">
-              <p className="con.lastMessage">{ props2.message}</p>
-              <p className="self-timeStamp">12:00 pm</p>
+          <div className="self-messageBox">
+              <p className="self-lastMessage">{ msg.content}</p>
+              <p className="self-timeStamp">{new Date(msg.updatedAt).toLocaleString()}</p>
           </div>
     </div>
   )

@@ -15,6 +15,7 @@ import Rooms from './components/Rooms';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
+import StartIntro from './components/startintro/StartIntro';
 
 function App() {
 
@@ -43,7 +44,8 @@ function App() {
             <Route exact path='/dashboard' element={<Dashboard></Dashboard>} />
 
             <Route exact path='/mainContainer' element={<MainContainer />}>
-              <Route index element={<ChatArea/>} />
+              <Route index element={<StartIntro/>} />
+              <Route exact path=":conversation_id/:chatName" element={<ChatArea/>}/>
               <Route exact path='users' element={<Users/>} />
               <Route exact path='groups' element={<Groups/>} />
             </Route>

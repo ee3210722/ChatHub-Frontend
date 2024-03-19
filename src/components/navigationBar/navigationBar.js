@@ -5,10 +5,9 @@ import { Link } from 'react-router-dom';
 import { SidebarData } from '../SidebarData';
 import { IconContext } from 'react-icons';
 import { useNavigate } from 'react-router-dom';
-import { IconButton } from '@mui/material';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ProfileEditModal from './ProfileEditModal';
+import UserProfileEditModal from './UserProfileEditmodal';
 import { BACKEND_URL } from '../../services/info';
 import './navigationBar.css';
 
@@ -31,14 +30,15 @@ function Navbar(props) {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${sessionStorage.getItem('token')}`
         },
       });
       const responseData = await response.json();
 
       if (responseData.success) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('userInfo');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('userInfo');
+        sessionStorage.removeItem('chatAreaInfo');
         props.showAlert(responseData.msg, "success");
         navigate("/");
       } else {
@@ -57,7 +57,7 @@ function Navbar(props) {
 
         <div className='navbar'>
 
-          {localStorage.getItem('token') ? (
+          {sessionStorage.getItem('token') ? (
             <div className='menu-bars'>
             <Link to='#' className='menu-bars'><FaIcons.FaBars onClick={showSidebar}/></Link>
             </div>
@@ -72,7 +72,7 @@ function Navbar(props) {
             ChatHub
           </div>
 
-          {localStorage.getItem('token') ? (
+          {sessionStorage.getItem('token') ? (
             <div className='navbar-icons'>
               <div onClick={handleOpenProfileModal}><AccountCircleIcon /></div>
               <div><CircleNotificationsIcon/></div>
@@ -87,8 +87,7 @@ function Navbar(props) {
 
         </div>
 
-        {/* Render the ProfileEditModal */}
-        {/* <ProfileEditModal isOpen={isProfileModalOpen} onClose={handleCloseProfileModal} showAlert={props.showAlert} /> */}
+        <UserProfileEditModal isOpen={isProfileModalOpen} onClose={handleCloseProfileModal}/>
 
         <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
           <ul className='nav-menu-items' onClick={showSidebar}>

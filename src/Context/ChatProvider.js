@@ -3,15 +3,19 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 const ChatContext = createContext();
 
 const ChatProvider = ({ children }) => {
-  const [user, setUser] = useState();
+
+  const [chatAreaInfo, setChatAreaInfo] = useState(() => {
+    const storedChatAreaInfo = JSON.parse(sessionStorage.getItem("chatAreaInfo"));
+    return storedChatAreaInfo || {"convoChat": null, "chatName": null};
+  });
+
 
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    setUser(userInfo);
-  }, []);
+    sessionStorage.setItem("chatAreaInfo", JSON.stringify(chatAreaInfo));
+  }, [chatAreaInfo]);
 
   return (
-    <ChatContext.Provider value={{user,setUser}}>
+    <ChatContext.Provider value={{chatAreaInfo, setChatAreaInfo}}>
       {children}
     </ChatContext.Provider>
   );
