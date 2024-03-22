@@ -12,6 +12,7 @@ import { Spinner } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChatState } from '../../Context/ChatProvider';
 import { BACKEND_URL } from '../../services/info';
+import GroupHeaderMenu from '../UsersGroups/GroupHeaderMenu';
 import './chatarea.css';
 import io from 'socket.io-client';
 let socket, selectedChatCompare;
@@ -32,6 +33,8 @@ export default function ChatArea() {
     socket.emit("setup", userLoggedIn);
     socket.on("connection", () => {setSocketConnected(!socketConnected)});
   }, [])
+
+
 
   const getAllMessages = async () => {
     try {
@@ -60,7 +63,9 @@ export default function ChatArea() {
   useEffect(() => {
     getAllMessages();
     selectedChatCompare = chatAreaInfo.convoChat;
+
   }, [chatAreaInfo]);
+
 
   const sendMessage = async () => {
     try {
@@ -80,7 +85,9 @@ export default function ChatArea() {
           const responseData = await response.json();
           const newMessage = responseData.sendedMessage;
           socket.emit("new message", newMessage);
-          setAllMessages([newMessage,...allMessages]);
+        setAllMessages([newMessage, ...allMessages]);
+        // let elem = document.getElementById("message-container");
+        // elem.scrollTop = elem.scrollHeight
       } else {
           console.log("An error occurred during updating sending message");
       }
@@ -90,17 +97,33 @@ export default function ChatArea() {
     }
   }
 
+
   useEffect(() => {
+    // let elem = document.getElementById("message-container");
     socket.on("message received", (newMessageReceived) => {
       if (!selectedChatCompare || selectedChatCompare._id !== newMessageReceived.chat._id) {
-        //notifications
-        console.log("yha pr dikkat h shayad")
+        // if (!notifications.includes(newMessageReceived)) {
+        //   setNotifications([newMessageReceived, ...notifications]);
+        //   console.log(notifications);
+        // }
       } else {
         setAllMessages([newMessageReceived, ...allMessages]);
-        console.log(allMessages)
+        // elem.scrollTop = elem.scrollHeight;
       }
     })
   });
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleMenuToggle = (event) => {
+    setAnchorEl(event.currentTarget);
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleCloseMenu = () => {
+    setIsMenuOpen(false);
+  };
 
   return (
     <AnimatePresence>
@@ -115,11 +138,16 @@ export default function ChatArea() {
             <div className="icon-buttons">
               <IconButton><PhoneInTalkIcon/></IconButton>
               <IconButton><VideoCallIcon/></IconButton>
-              <IconButton><MoreVertIcon/></IconButton>
+              <IconButton aria-controls={isMenuOpen ? 'basic-menu' : undefined} aria-haspopup="true" aria-expanded={isMenuOpen ? 'true' : undefined} onClick={handleMenuToggle}>
+                <MoreVertIcon />
+              </IconButton>
+              {isMenuOpen && (
+              <GroupHeaderMenu anchorEl={anchorEl} open={isMenuOpen} onClose={handleCloseMenu} isGroup={chatAreaInfo.convoChat.isGroupChat} />
+              )}
           </div>
         </div>
 
-      <div className="messages-container">
+      <div id="message-container" className="messages-container">
         {loading ?
           <div className="spinner-container">
             <Spinner thickness='4px' speed='10000s' emptyColor='#E2E8F0' color='#4299E1'  size='xl' h={30} w={30}/>

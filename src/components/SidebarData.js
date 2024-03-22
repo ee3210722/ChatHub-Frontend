@@ -17,12 +17,6 @@ export const SidebarData = [
     cName: 'nav-text'
   },
   {
-    title: 'Rooms',
-    path: '/rooms',
-    icon: <IoIcons.IoMdChatbubbles  />,
-    cName: 'nav-text'
-  },
-  {
     title: 'Logout',
     path: '/logout',
     icon: <FaIcons.FaSignOutAlt />,

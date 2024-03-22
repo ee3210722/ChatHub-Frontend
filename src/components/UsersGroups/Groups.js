@@ -5,11 +5,14 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { AnimatePresence, motion } from "framer-motion"
 import Modalpopup from './ModalPopUp';
 import { BACKEND_URL } from '../../services/info';
+import { useNavigate } from 'react-router-dom';
+import { ChatState } from '../../Context/ChatProvider';
 import './UsersGroups.css';
 
-// onClick functionality is pending!
-
 export default function Groups() {
+
+    const { setChatAreaInfo } = ChatState();
+    const navigate = useNavigate();
 
     const [open, openchange] = useState(false);
     const [allGroups, setAllGroups] = useState([]);
@@ -34,7 +37,33 @@ export default function Groups() {
 
     useEffect(() => {
         getAllGroups();
-    },[])
+    }, [])
+
+    const handleClickOnGroup = async (chatId) => {
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/chat/accessGroupChat`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ chatId: chatId })
+            });
+
+            const responseData = await response.json();
+            if (response.ok) {
+                setChatAreaInfo({ "convoChat": responseData, "chatName": responseData.chatName });
+                navigate(`/mainContainer/${responseData._id}/${encodeURIComponent(responseData.chatName)}`);
+            } else if (response.status === 300) {
+                console.log(responseData.msg);
+                // modal or something else will be added
+            } else {
+                console.log(responseData.msg);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
     return (
@@ -54,8 +83,9 @@ export default function Groups() {
                 </div>
 
                 <div className="ug-list">
-                    {allGroups && allGroups.map((group, index) => (
-                        <motion.div key={index} whileHover={{ scale: 1.03 }} whileTap={{scale: 0.91}} className="list-item">
+                    {console.log(allGroups)}
+                    {allGroups.length > 0 && allGroups.map((group, index) => (
+                        <motion.div key={index} onClick={() => handleClickOnGroup(group._id)} whileHover={{ scale: 1.03 }} whileTap={{scale: 0.91}} className="list-item">
                             <p className="list-item-icon">{group.chatName.charAt(0) }</p>
                             <p className="list-item-title">{group.chatName}</p>
                         </motion.div>

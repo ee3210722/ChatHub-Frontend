@@ -37,7 +37,7 @@ export default function Users() {
 
     const handleClickOnUser = async (userId) => {
         try {
-            const response = await fetch(`${BACKEND_URL}/api/chat/`, {
+            const response = await fetch(`${BACKEND_URL}/api/chat/accessUserChat`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('token')}`,

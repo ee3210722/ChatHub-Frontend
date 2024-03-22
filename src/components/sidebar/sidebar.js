@@ -22,7 +22,7 @@ export default function Sidebar() {
   const fetchAllChats = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${BACKEND_URL}/api/chat/`, {
+      const response = await fetch(`${BACKEND_URL}/api/chat/fetchUserChats`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('token')}`

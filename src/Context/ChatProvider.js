@@ -9,13 +9,14 @@ const ChatProvider = ({ children }) => {
     return storedChatAreaInfo || {"convoChat": null, "chatName": null};
   });
 
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     sessionStorage.setItem("chatAreaInfo", JSON.stringify(chatAreaInfo));
   }, [chatAreaInfo]);
 
   return (
-    <ChatContext.Provider value={{chatAreaInfo, setChatAreaInfo}}>
+    <ChatContext.Provider value={{chatAreaInfo, setChatAreaInfo, notifications, setNotifications}}>
       {children}
     </ChatContext.Provider>
   );

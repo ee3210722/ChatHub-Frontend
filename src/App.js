@@ -8,14 +8,13 @@ import Login from './components/login/login';
 import Signup from "./components/signup/signup";
 import Dashboard from './components/dashboard/dashboard';
 import MainContainer from './components/mainContainer/mainContainer';
+import Welcome from './components/welcome/Welcome';
 import ChatArea from './components/chatarea/chatarea';
 import Users from './components/UsersGroups/Users';
 import Groups from './components/UsersGroups/Groups';
-import Rooms from './components/Rooms';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import StartIntro from './components/startintro/StartIntro';
 
 function App() {
 
@@ -44,13 +43,12 @@ function App() {
             <Route exact path='/dashboard' element={<Dashboard></Dashboard>} />
 
             <Route exact path='/mainContainer' element={<MainContainer />}>
-              <Route index element={<StartIntro/>} />
+              <Route index element={<Welcome/>} />
               <Route exact path=":conversation_id/:chatName" element={<ChatArea/>}/>
               <Route exact path='users' element={<Users/>} />
               <Route exact path='groups' element={<Groups/>} />
             </Route>
-
-            <Route exact path='/rooms' element={<Rooms />}  />
+            
           </Routes>
         </div>
       </Router>
