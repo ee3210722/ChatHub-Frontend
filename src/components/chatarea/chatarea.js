@@ -93,14 +93,11 @@ export default function ChatArea(props) {
           const responseData = await response.json();
           const newMessage = responseData.sendedMessage;
           socket.emit("new message", newMessage);
-        setAllMessages([newMessage, ...allMessages]);
-        // let elem = document.getElementById("message-container");
-        // elem.scrollTop = elem.scrollHeight
+          setAllMessages([newMessage, ...allMessages]);
       } else {
           console.log("An error occurred during updating sending message");
       }
     } catch (error) {
-      // throw new Error('Failed to send the message: ' + error.message);
       console.log(error);
     }
   }
