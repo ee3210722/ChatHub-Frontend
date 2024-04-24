@@ -44,7 +44,7 @@ function App() {
 
             <Route exact path='/mainContainer' element={<MainContainer />}>
               <Route index element={<Welcome/>} />
-              <Route exact path=":conversation_id/:chatName" element={<ChatArea/>}/>
+              <Route exact path=":conversation_id/:chatName" element={<ChatArea showAlert={showAlert}/>}/>
               <Route exact path='users' element={<Users/>} />
               <Route exact path='groups' element={<Groups/>} />
             </Route>
