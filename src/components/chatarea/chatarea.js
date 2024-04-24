@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import { IconButton } from '@mui/material';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import VideoCallIcon from '@mui/icons-material/VideoCall';
@@ -15,13 +15,21 @@ import { BACKEND_URL } from '../../services/info';
 import GroupHeaderMenu from '../UsersGroups/GroupHeaderMenu';
 import './chatarea.css';
 import io from 'socket.io-client';
+import { GiConsoleController } from 'react-icons/gi';
 let socket, selectedChatCompare;
 
 export default function ChatArea() {
 
+  const fileInputRef = useRef(null);
+
+  const handleImageSelect = () => {
+    fileInputRef.current.click();
+  };
+
   const { chatAreaInfo } = ChatState();
   const [allMessages, setAllMessages] = useState([]);
-  const [newMessageContent, setNewMessageContent] = useState("");
+  // const [newMessageContent, setNewMessageContent] = useState("");
+  const [newImageContent, setNewImageContent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
 
@@ -67,36 +75,87 @@ export default function ChatArea() {
   }, [chatAreaInfo]);
 
 
-  const sendMessage = async () => {
+  // const sendMessage = async () => {
+  //   try {
+  //     const msgDetails = JSON.stringify({
+  //       content: newMessageContent,
+  //       chatId: chatAreaInfo.convoChat._id
+  //     })
+  //     const response = await fetch(`${BACKEND_URL}/api/message/`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body:msgDetails
+  //     })
+  //     if (response.ok) {
+  //         const responseData = await response.json();
+  //         const newMessage = responseData.sendedMessage;
+  //         socket.emit("new message", newMessage);
+  //       setAllMessages([newMessage, ...allMessages]);
+  //       // let elem = document.getElementById("message-container");
+  //       // elem.scrollTop = elem.scrollHeight
+  //     } else {
+  //         console.log("An error occurred during updating sending message");
+  //     }
+  //   } catch (error) {
+  //     // throw new Error('Failed to send the message: ' + error.message);
+  //     console.log(error);
+  //   }
+  // }
+
+  const handleFileSelect = (e) => {
+    const selectedImage = e.target.files[0];
+    setNewImageContent(selectedImage);
+  };
+  
+  const sendImage = async () => {
+    console.log("Hello")
     try {
-      const msgDetails = JSON.stringify({
-        content: newMessageContent,
-        chatId: chatAreaInfo.convoChat._id
-      })
-      const response = await fetch(`${BACKEND_URL}/api/message/`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        },
-        body:msgDetails
-      })
-      if (response.ok) {
-          const responseData = await response.json();
-          const newMessage = responseData.sendedMessage;
-          socket.emit("new message", newMessage);
-        setAllMessages([newMessage, ...allMessages]);
-        // let elem = document.getElementById("message-container");
-        // elem.scrollTop = elem.scrollHeight
+      const formData = new FormData();
+      formData.append('image', newImageContent);
+
+      const response = await fetch("http://127.0.0.1:8084/ml/make_bounding_box", {
+          method: 'PUT',
+          body: formData,
+      });
+      const responseData = await response.json();
+
+      if (responseData.status===200) {
+          console.log("nitesh ki api toh chl gyi h");
+          const isValid = responseData.result.face_present;
+          console.log("isImageValid", isValid);
+          const img = responseData.result.data;
+          try {
+            const formData = new FormData();
+            formData.append('content', newImageContent);
+            formData.append('chatId', chatAreaInfo.convoChat._id);
+            const response = await fetch(`${BACKEND_URL}/api/message/`, {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+              },
+              body:formData
+            })
+            if (response.ok) {
+                const responseData = await response.json();
+                const newMessage = responseData.sendedMessage;
+                socket.emit("new image", img);
+                setAllMessages([img, ...allMessages]);
+            } else {
+                console.log("An error occurred during sending image");
+            }
+          } catch (error) {
+            console.log(error);
+          }
       } else {
-          console.log("An error occurred during updating sending message");
+          console.log("An error occurred during face recoginition");
       }
     } catch (error) {
-      // throw new Error('Failed to send the message: ' + error.message);
       console.log(error);
     }
   }
-
 
   useEffect(() => {
     // let elem = document.getElementById("message-container");
@@ -124,6 +183,10 @@ export default function ChatArea() {
   const handleCloseMenu = () => {
     setIsMenuOpen(false);
   };
+
+  // const handleImageSelect = () => {
+
+  // }
 
   return (
     <AnimatePresence>
@@ -166,16 +229,18 @@ export default function ChatArea() {
 
       <div className="text-input-area">
           <IconButton><InsertEmoticonOutlinedIcon/></IconButton>
-          <IconButton><AttachFileOutlinedIcon/></IconButton>
-          <input className="search-box" type="text" placeholder="Type a message" value={newMessageContent} onChange={(e) => setNewMessageContent(e.target.value)}
+          <IconButton onClick={() => handleImageSelect()}> <AttachFileOutlinedIcon/></IconButton>
+          {/* <input ref={fileInputRef} id="imageInput" type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileSelect}/> */}
+          <input ref={fileInputRef} id="imageInput" type="file" accept="image/*" onChange={handleFileSelect}/>
+          {/* <input className="search-box" type="text" placeholder="Type a message" value={newMessageContent} onChange={(e) => setNewMessageContent(e.target.value)}
             onKeyDown={(e) => {
               if (e.code === "Enter") {
                 sendMessage();
                 setNewMessageContent("");
               }
             }}
-          />
-          <IconButton onClick={() => sendMessage()}><SendIcon/></IconButton>
+          /> */}
+          <IconButton onClick={() => sendImage()}><SendIcon/></IconButton>
       </div>
 
       </motion.div>
