@@ -107,58 +107,81 @@ export default function ChatArea(props) {
     setImageContent(selectedImage);
   };
   
+  // ASSIGNMENT TASK :
   const sendImage = async () => {
     try {
+      // Creating a FormData object to send the image content
       const formData = new FormData();
       formData.append('image', imageContent);
+      
+      // Sending a PUT request to the backend server to process the image
       const response = await fetch("http://127.0.0.1:8084/ml/make_bounding_box", {
-          method: 'PUT',
-          body: formData,
+        method: 'PUT',
+        body: formData,
       });
+  
+      // Parsing the response JSON
       const responseData = await response.json();
       console.log(responseData);
-
-      if (responseData.status===200) {
-          const isValid = responseData.result.face_present;
-          console.log("isImageValid", isValid);
-          if(!isValid){
-            props.showAlert("Please upload a valid image!", 'danger');
-            return;
+  
+      // Checking if the response status is 200 (OK)
+      if (responseData.status === 200) {
+        // Checking if a face is present in the image
+        const isValid = responseData.result.face_present;
+        console.log("isImageValid", isValid);
+        
+        // If no face is detected, showing an alert and return
+        if (!isValid) {
+          props.showAlert("Please upload a valid image!", 'danger');
+          return;
+        }
+        
+        // Extracting the image URL from the response data
+        const imgUrl = responseData.result.data;
+  
+        try {
+          // Preparing message details to send to the server
+          const msgDetails = JSON.stringify({
+            content: imgUrl,
+            chatId: chatAreaInfo.convoChat._id
+          });
+  
+          // Sending a POST request to the backend server to save the message
+          const response = await fetch(`${BACKEND_URL}/api/message/`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+              'Content-Type': 'application/json'
+            },
+            body: msgDetails
+          });
+  
+          // Checking if the message was successfully sent
+          if (response.ok) {
+            // Parsing the response JSON
+            const responseData = await response.json();
+            console.log("responseData: ", responseData);
+            
+            // Emiting a socket event for the new message
+            const newMessage = responseData.sendedMessage;
+            socket.emit("new message", newMessage);
+            
+            // Updating the state with the new message
+            setAllMessages([newMessage, ...allMessages]);
+          } else {
+            console.log("An error occurred during updating sending message");
           }
-          const imgUrl = responseData.result.data;
-
-          try {
-            const msgDetails = JSON.stringify({
-              content: imgUrl,
-              chatId: chatAreaInfo.convoChat._id
-            })
-            const response = await fetch(`${BACKEND_URL}/api/message/`, {
-              method: 'POST',
-              headers: {
-                'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
-                'Content-Type': 'application/json'
-              },
-              body:msgDetails
-            })
-            if (response.ok) {
-                const responseData = await response.json();
-                console.log("responseData: " , responseData);
-                const newMessage = responseData.sendedMessage;
-                socket.emit("new message", newMessage);
-                setAllMessages([newMessage, ...allMessages]);
-            } else {
-                console.log("An error occurred during updating sending message");
-            }
-          } catch (error) {
-            console.log(error);
-          }
+        } catch (error) {
+          console.log(error);
+        }
       } else {
-          console.log("An error occurred during face recoginition");
+        console.log("An error occurred during face recognition");
       }
     } catch (error) {
       console.log(error);
     }
   }
+  
 
   useEffect(() => {
     // let elem = document.getElementById("message-container");
